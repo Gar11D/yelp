@@ -17,7 +17,7 @@ app.get("/api/v1/restaurants", async (req, res) => {
             status: "success",
             results: results.rows.length,
             data: {
-                restaurants: results.rows
+                restaurant: results.rows
             }
         });
     }
