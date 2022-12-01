@@ -1,11 +1,11 @@
 import React, {useEffect, useContext} from 'react';
-import { unstable_HistoryRouter } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import RestaurantFinder from "../apis/RestaurantFinder";
 import { RestaurantsContext } from '../context/RestaurantsContext';
 
 const RestaurantList = (props) => {
   const {restaurants, setRestaurants} = useContext(RestaurantsContext);
-  let history = unstable_HistoryRouter();
+  let navigate = useNavigate();
   useEffect( () => {
     const fetchData = async () => {
       try{
@@ -25,6 +25,10 @@ const RestaurantList = (props) => {
     } catch(err) {
       console.log(err);
     }
+  };
+
+  const handleUpdate = (id) => {
+    navigate(`/restaurants/${id}/update`);
   };
 
   return (
@@ -48,7 +52,9 @@ const RestaurantList = (props) => {
                     <td>{el.location}</td>
                     <td>{"$".repeat(el.price_range)}</td>
                     <td>reviews</td>
-                    <td><button className="btn btn-warning">Update</button></td>
+                    <td><button onClick={() => handleUpdate(el.id)} 
+                    className="btn btn-warning"
+                    >Update</button></td>
                     <td><button onClick={() => handleDelete(el.id)}
                     className="btn btn-danger">
                       Delete

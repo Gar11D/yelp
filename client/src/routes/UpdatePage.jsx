@@ -2,7 +2,9 @@ import React from 'react'
 
 const UpdatePage = () => {
   return (
-    <div>UpdatePage</div>
+    <div>
+      <h1 className="text-center">Update Restaurant</h1>
+    </div>
   )
 }
 
