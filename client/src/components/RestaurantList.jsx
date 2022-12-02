@@ -18,7 +18,8 @@ const RestaurantList = (props) => {
     fetchData();
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
     try{
       const response = await RestaurantFinder.delete(`/${id}`);
       setRestaurants(restaurants.filter(el => {return el.id !== id}))
@@ -27,9 +28,14 @@ const RestaurantList = (props) => {
     }
   };
 
-  const handleUpdate = (id) => {
+  const handleUpdate = (e, id) => {
+    e.stopPropagation();
     navigate(`/restaurants/${id}/update`);
   };
+
+  const handleRestaurantSelect = (id) => {
+    navigate(`/restaurants/${id}`)
+  }
 
   return (
     <div className="list-group">
@@ -47,15 +53,15 @@ const RestaurantList = (props) => {
             <tbody>
               {restaurants && restaurants.map(el => {
                 return(
-                  <tr key={el.id}>
+                  <tr onClick={() => handleRestaurantSelect(el.id)} key={el.id}>
                     <td>{el.name}</td>
                     <td>{el.location}</td>
                     <td>{"$".repeat(el.price_range)}</td>
                     <td>reviews</td>
-                    <td><button onClick={() => handleUpdate(el.id)} 
+                    <td><button onClick={(e) => handleUpdate(e, el.id)} 
                     className="btn btn-warning"
                     >Update</button></td>
-                    <td><button onClick={() => handleDelete(el.id)}
+                    <td><button onClick={(e) => handleDelete(e, el.id)}
                     className="btn btn-danger">
                       Delete
                     </button></td>
