@@ -2,6 +2,7 @@ import React, {useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import RestaurantFinder from "../apis/RestaurantFinder";
 import { RestaurantsContext } from '../context/RestaurantsContext';
+import StarRating from './StarRating';
 
 const RestaurantList = (props) => {
   const {restaurants, setRestaurants} = useContext(RestaurantsContext);
@@ -10,6 +11,7 @@ const RestaurantList = (props) => {
     const fetchData = async () => {
       try{
         const response = await RestaurantFinder.get("/");
+        console.log(response.data.data);
         setRestaurants(response.data.data.restaurant);
       } catch(err){
         console.log(err);
@@ -37,6 +39,18 @@ const RestaurantList = (props) => {
     navigate(`/restaurants/${id}`)
   }
 
+  const renderRating = (restaurant) => {
+    if(!restaurant.count) {
+      return <span className="text-warning">0 reviews</span>
+    }
+    return (
+      <>
+        <StarRating rating={restaurant.id}/>
+        <span className="text-warning ml-1">({restaurant.count})</span>
+      </>
+    )
+  }
+
   return (
     <div className="list-group">
         <table className="table table-hover table-dark">
@@ -57,7 +71,7 @@ const RestaurantList = (props) => {
                     <td>{el.name}</td>
                     <td>{el.location}</td>
                     <td>{"$".repeat(el.price_range)}</td>
-                    <td>reviews</td>
+                    <td>{renderRating(el)}</td>
                     <td><button onClick={(e) => handleUpdate(e, el.id)} 
                     className="btn btn-warning"
                     >Update</button></td>
